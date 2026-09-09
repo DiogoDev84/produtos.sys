@@ -166,10 +166,18 @@
             @error('price') <div class="error">{{ $message }}</div> @enderror
           </div>
 
+          <div class="field">
+            <label for="category">categoria</label>
+            <input type="text" name="category" id="category" value="{{ old('category', $produto->category) }}" placeholder="ex: Eletrônicos">
+            @error('category') <div class="error">{{ $message }}</div> @enderror
+          </div>
+
           <div class="actions">
             <button type="submit" class="btn btn-primary">Atualizar produto</button>
             <a href="{{ route('produtos.index') }}" class="cancel-link">cancelar</a>
           </div>
+
+        
         </form>
       </div>
     </div>

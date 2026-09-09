@@ -190,6 +190,7 @@
               <th>Nome</th>
               <th>Descrição</th>
               <th>Preço</th>
+              <th>categoria</th>
               <th></th>
             </tr>
           </thead>
@@ -200,6 +201,7 @@
                 <td class="name">{{ $produto->name }}</td>
                 <td class="desc">{{ $produto->description ?: '—' }}</td>
                 <td class="price">R$ {{ number_format($produto->price, 2, ',', '.') }}</td>
+                <td class="category">{{ $produto->category ?: '—' }}</td>
                 <td class="actions">
                   <a href="{{ route('produtos.edit', $produto) }}" class="link-edit">editar</a>
                   <form action="{{ route('produtos.destroy', $produto) }}" method="POST" onsubmit="return confirm('Remover este produto?');">

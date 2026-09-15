@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Editar produto // Painel')
+@section('title', 'Editar cliente // Painel')
 
 @push('styles')
 <style>
@@ -19,13 +19,12 @@
     letter-spacing: 0.08em; color: var(--amber-dim); margin-bottom: 8px;
   }
   label::before { content: '> '; color: var(--amber); }
-  input[type="text"], input[type="number"], textarea {
+  input[type="text"], input[type="email"] {
     width: 100%; background: var(--ink); border: 1px solid var(--panel-line); color: var(--paper);
     font-family: 'IBM Plex Sans', sans-serif; font-size: 14px; padding: 12px 14px;
     transition: border-color 0.15s ease;
   }
-  input:focus, textarea:focus { border-color: var(--amber); outline: none; }
-  textarea { resize: vertical; min-height: 90px; }
+  input:focus { border-color: var(--amber); outline: none; }
   .error { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--signal); margin-top: 6px; }
   .error::before { content: '! '; }
   .actions { display: flex; align-items: center; gap: 18px; margin-top: 32px; }
@@ -57,42 +56,43 @@
     </div>
   </nav>
 
-  <div class="eyebrow">REGISTRO #{{ str_pad($produto->id, 3, '0', STR_PAD_LEFT) }}</div>
-  <h1>Editar produto</h1>
+  <div class="eyebrow">REGISTRO #{{ str_pad($cliente->id, 3, '0', STR_PAD_LEFT) }}</div>
+  <h1>Editar cliente</h1>
 
   <div class="panel">
-    <div class="panel-head">UPDATE products WHERE id = {{ $produto->id }}</div>
+    <div class="panel-head">UPDATE clientes WHERE id = {{ $cliente->id }}</div>
     <div class="panel-body">
-      <form action="{{ route('produtos.update', $produto) }}" method="POST">
+      <form action="{{ route('clientes.update', $cliente) }}" method="POST">
         @csrf
         @method('PUT')
 
         <div class="field">
           <label for="name">nome</label>
-          <input type="text" name="name" id="name" value="{{ old('name', $produto->name) }}" placeholder="ex: Teclado mecânico">
+          <input type="text" name="name" id="name" value="{{ old('name', $cliente->name) }}" placeholder="ex: João da Silva">
           @error('name') <div class="error">{{ $message }}</div> @enderror
         </div>
 
         <div class="field">
-          <label for="description">descrição</label>
-          <textarea name="description" id="description" placeholder="detalhes do produto (opcional)">{{ old('description', $produto->description) }}</textarea>
+          <label for="email">e-mail</label>
+          <input type="email" name="email" id="email" value="{{ old('email', $cliente->email) }}" placeholder="ex: joao@email.com">
+          @error('email') <div class="error">{{ $message }}</div> @enderror
         </div>
 
         <div class="field">
-          <label for="price">preço</label>
-          <input type="number" step="0.01" name="price" id="price" value="{{ old('price', $produto->price) }}" placeholder="0.00">
-          @error('price') <div class="error">{{ $message }}</div> @enderror
+          <label for="phone">telefone</label>
+          <input type="text" name="phone" id="phone" value="{{ old('phone', $cliente->phone) }}" placeholder="ex: (11) 99999-9999">
+          @error('phone') <div class="error">{{ $message }}</div> @enderror
         </div>
 
         <div class="field">
-          <label for="category">categoria</label>
-          <input type="text" name="category" id="category" value="{{ old('category', $produto->category) }}" placeholder="ex: Eletrônicos">
-          @error('category') <div class="error">{{ $message }}</div> @enderror
+          <label for="address">endereço</label>
+          <input type="text" name="address" id="address" value="{{ old('address', $cliente->address) }}" placeholder="ex: Rua das Flores, 123">
+          @error('address') <div class="error">{{ $message }}</div> @enderror
         </div>
 
         <div class="actions">
-          <button type="submit" class="btn btn-primary">Atualizar produto</button>
-          <a href="{{ route('produtos.index') }}" class="cancel-link">cancelar</a>
+          <button type="submit" class="btn btn-primary">Atualizar cliente</button>
+          <a href="{{ route('clientes.index') }}" class="cancel-link">cancelar</a>
         </div>
       </form>
     </div>

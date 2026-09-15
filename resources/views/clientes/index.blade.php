@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Produtos // Painel')
+@section('title', 'Clientes // Painel')
 
 @push('styles')
 <style>
@@ -34,7 +34,6 @@
   td.id { font-family: 'IBM Plex Mono', monospace; color: var(--amber-dim); font-size: 13px; }
   td.name { font-weight: 600; }
   td.desc { color: var(--paper-dim); max-width: 320px; }
-  td.price { font-family: 'IBM Plex Mono', monospace; color: var(--amber); white-space: nowrap; }
   td.actions { text-align: right; white-space: nowrap; }
   td.actions form { display: inline; }
   .link-edit {
@@ -48,7 +47,7 @@
   @media (max-width: 780px) {
     .navlinks { display: none; }
     td.desc { display: none; }
-    thead th:nth-child(3) { display: none; }
+    thead th:nth-child(4) { display: none; }
   }
 </style>
 @endpush
@@ -62,8 +61,8 @@
     </a>
     <div class="navlinks" style="align-items: center;">
       <a href="/">Início</a>
-      <a href="{{ route('produtos.index') }}" class="active">Produtos</a>
-      <a href="{{ route('clientes.index') }}">Clientes</a>
+      <a href="{{ route('produtos.index') }}">Produtos</a>
+      <a href="{{ route('clientes.index') }}" class="active">Clientes</a>
       <form method="POST" action="{{ route('logout') }}" style="display:inline; margin: 0;">
         @csrf
         <button type="submit" class="btn-logout">Sair →</button>
@@ -73,10 +72,10 @@
 
   <div class="page-head">
     <div>
-      <div class="eyebrow">CATÁLOGO CARREGADO</div>
-      <h1>Produtos cadastrados</h1>
+      <div class="eyebrow">BASE DE CLIENTES</div>
+      <h1>Clientes cadastrados</h1>
     </div>
-    <a href="{{ route('produtos.create') }}" class="btn btn-primary">+ Novo produto</a>
+    <a href="{{ route('clientes.create') }}" class="btn btn-primary">+ Novo cliente</a>
   </div>
 
   @if (session('success'))
@@ -85,33 +84,31 @@
 
   <div class="panel">
     <div class="panel-head">
-      <span>TABELA: PRODUCTS</span>
-      <span class="count">{{ $produtos->count() }} REGISTRO(S)</span>
+      <span>TABELA: CLIENTES</span>
+      <span class="count">{{ $clientes->count() }} REGISTRO(S)</span>
     </div>
 
-    @if ($produtos->count() > 0)
+    @if ($clientes->count() > 0)
       <table>
         <thead>
           <tr>
             <th>ID</th>
             <th>Nome</th>
-            <th>Descrição</th>
-            <th>Preço</th>
-            <th>categoria</th>
+            <th>E-mail</th>
+            <th>Telefone</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
-          @foreach ($produtos as $produto)
+          @foreach ($clientes as $cliente)
             <tr>
-              <td class="id">#{{ str_pad($produto->id, 3, '0', STR_PAD_LEFT) }}</td>
-              <td class="name">{{ $produto->name }}</td>
-              <td class="desc">{{ $produto->description ?: '—' }}</td>
-              <td class="price">R$ {{ number_format($produto->price, 2, ',', '.') }}</td>
-              <td class="category">{{ $produto->category ?: '—' }}</td>
+              <td class="id">#{{ str_pad($cliente->id, 3, '0', STR_PAD_LEFT) }}</td>
+              <td class="name">{{ $cliente->name }}</td>
+              <td class="desc">{{ $cliente->email }}</td>
+              <td>{{ $cliente->phone ?: '—' }}</td>
               <td class="actions">
-                <a href="{{ route('produtos.edit', $produto) }}" class="link-edit">editar</a>
-                <form action="{{ route('produtos.destroy', $produto) }}" method="POST" onsubmit="return confirm('Remover este produto?');">
+                <a href="{{ route('clientes.edit', $cliente) }}" class="link-edit">editar</a>
+                <form action="{{ route('clientes.destroy', $cliente) }}" method="POST" onsubmit="return confirm('Remover este cliente?');">
                   @csrf
                   @method('DELETE')
                   <button type="submit" class="btn btn-danger">excluir</button>
@@ -123,8 +120,8 @@
       </table>
     @else
       <div class="empty">
-        <div class="ok">&gt; nenhum produto encontrado</div>
-        <div>cadastre o primeiro item para começar a rastrear seu estoque</div>
+        <div class="ok">&gt; nenhum cliente encontrado</div>
+        <div>cadastre o primeiro cliente para começar</div>
       </div>
     @endif
   </div>

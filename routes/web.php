@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProdutoController;
+use App\Http\Controllers\ClienteController;
 
 
 
@@ -22,4 +23,5 @@ Route::middleware('auth')->group(function () {
         return view('welcome');
     });
     Route::resource('produtos', ProdutoController::class);
+    Route::resource('clientes', ClienteController::class)->except(['show']);
 });

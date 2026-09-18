@@ -49,6 +49,7 @@
       <a href="/">Início</a>
       <a href="{{ route('produtos.index') }}">Produtos</a>
       <a href="{{ route('clientes.index') }}">Clientes</a>
+      <a href="{{ route('pedidos.index') }}">Pedidos</a>
       <form method="POST" action="{{ route('logout') }}" style="display:inline; margin: 0;">
         @csrf
         <button type="submit" class="btn-logout">Sair →</button>

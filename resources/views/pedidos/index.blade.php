@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Produtos // Painel')
+@section('title', 'Pedidos // Painel')
 
 @push('styles')
 <style>
@@ -33,22 +33,25 @@
   tbody tr:hover { background: rgba(255,176,0,0.04); }
   td.id { font-family: 'IBM Plex Mono', monospace; color: var(--amber-dim); font-size: 13px; }
   td.name { font-weight: 600; }
-  td.desc { color: var(--paper-dim); max-width: 320px; }
   td.price { font-family: 'IBM Plex Mono', monospace; color: var(--amber); white-space: nowrap; }
   td.actions { text-align: right; white-space: nowrap; }
   td.actions form { display: inline; }
-  .link-edit {
+  .link-view {
     font-family: 'IBM Plex Mono', monospace; font-size: 12px; text-decoration: none;
     color: var(--paper); border-bottom: 1px solid var(--panel-line); padding-bottom: 1px; margin-right: 16px;
   }
-  .link-edit:hover { color: var(--amber); border-color: var(--amber-dim); }
+  .link-view:hover { color: var(--amber); border-color: var(--amber-dim); }
+  .badge {
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.06em;
+    padding: 4px 10px; display: inline-block; text-transform: uppercase;
+  }
+  .badge-pendente { color: var(--paper-dim); border: 1px solid var(--panel-line); }
+  .badge-assinado { color: var(--amber); border: 1px solid var(--amber-dim); }
   .empty { padding: 60px 18px; text-align: center; font-family: 'IBM Plex Mono', monospace; color: var(--paper-dim); font-size: 13px; }
   .empty .ok { color: var(--amber); }
 
   @media (max-width: 780px) {
     .navlinks { display: none; }
-    td.desc { display: none; }
-    thead th:nth-child(3) { display: none; }
   }
 </style>
 @endpush
@@ -62,9 +65,9 @@
     </a>
     <div class="navlinks" style="align-items: center;">
       <a href="/">Início</a>
-      <a href="{{ route('produtos.index') }}" class="active">Produtos</a>
+      <a href="{{ route('produtos.index') }}">Produtos</a>
       <a href="{{ route('clientes.index') }}">Clientes</a>
-      <a href="{{ route('pedidos.index') }}">Pedidos</a>
+      <a href="{{ route('pedidos.index') }}" class="active">Pedidos</a>
       <form method="POST" action="{{ route('logout') }}" style="display:inline; margin: 0;">
         @csrf
         <button type="submit" class="btn-logout">Sair →</button>
@@ -74,10 +77,10 @@
 
   <div class="page-head">
     <div>
-      <div class="eyebrow">CATÁLOGO CARREGADO</div>
-      <h1>Produtos cadastrados</h1>
+      <div class="eyebrow">CONTROLE DE VENDAS</div>
+      <h1>Pedidos</h1>
     </div>
-    <a href="{{ route('produtos.create') }}" class="btn btn-primary">+ Novo produto</a>
+    <a href="{{ route('pedidos.create') }}" class="btn btn-primary">+ Novo pedido</a>
   </div>
 
   @if (session('success'))
@@ -86,33 +89,39 @@
 
   <div class="panel">
     <div class="panel-head">
-      <span>TABELA: PRODUCTS</span>
-      <span class="count">{{ $produtos->count() }} REGISTRO(S)</span>
+      <span>TABELA: PEDIDOS</span>
+      <span class="count">{{ $pedidos->count() }} REGISTRO(S)</span>
     </div>
 
-    @if ($produtos->count() > 0)
+    @if ($pedidos->count() > 0)
       <table>
         <thead>
           <tr>
             <th>ID</th>
-            <th>Nome</th>
-            <th>Descrição</th>
-            <th>Preço</th>
-            <th>categoria</th>
+            <th>Cliente</th>
+            <th>Produto</th>
+            <th>Valor</th>
+            <th>Status</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
-          @foreach ($produtos as $produto)
+          @foreach ($pedidos as $pedido)
             <tr>
-              <td class="id">#{{ str_pad($produto->id, 3, '0', STR_PAD_LEFT) }}</td>
-              <td class="name">{{ $produto->name }}</td>
-              <td class="desc">{{ $produto->description ?: '—' }}</td>
-              <td class="price">R$ {{ number_format($produto->price, 2, ',', '.') }}</td>
-              <td class="category">{{ $produto->category ?: '—' }}</td>
+              <td class="id">#{{ str_pad($pedido->id, 3, '0', STR_PAD_LEFT) }}</td>
+              <td class="name">{{ $pedido->cliente->name }}</td>
+              <td>{{ $pedido->produto->name }}</td>
+              <td class="price">R$ {{ number_format($pedido->valor_total, 2, ',', '.') }}</td>
+              <td>
+                @if ($pedido->status === 'assinado')
+                  <span class="badge badge-assinado">assinado</span>
+                @else
+                  <span class="badge badge-pendente">pendente</span>
+                @endif
+              </td>
               <td class="actions">
-                <a href="{{ route('produtos.edit', $produto) }}" class="link-edit">editar</a>
-                <form action="{{ route('produtos.destroy', $produto) }}" method="POST" onsubmit="return confirm('Remover este produto?');">
+                <a href="{{ route('pedidos.show', $pedido) }}" class="link-view">ver</a>
+                <form action="{{ route('pedidos.destroy', $pedido) }}" method="POST" onsubmit="return confirm('Remover este pedido?');">
                   @csrf
                   @method('DELETE')
                   <button type="submit" class="btn btn-danger">excluir</button>
@@ -124,8 +133,8 @@
       </table>
     @else
       <div class="empty">
-        <div class="ok">&gt; nenhum produto encontrado</div>
-        <div>cadastre o primeiro item para começar a rastrear seu estoque</div>
+        <div class="ok">&gt; nenhum pedido encontrado</div>
+        <div>crie o primeiro pedido para começar</div>
       </div>
     @endif
   </div>

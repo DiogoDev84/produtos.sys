@@ -117,7 +117,7 @@
   }
 </style>
 
-{{-- Cada página pode empilhar seu próprio <style> específico aqui --}}
+{{-- Cada página pode empilhar seu próprio bloco de estilo aqui --}}
 @stack('styles')
 </head>
 <body>

@@ -73,6 +73,24 @@
     .grid { grid-template-columns: 1fr; }
     .navlinks { display: none; }
   }
+    @media (max-width: 860px) {
+    .grid { grid-template-columns: 1fr; }
+    .navlinks { display: none; }
+  }
+
+  @media print {
+    body { background: #fff !important; color: #000 !important; }
+    nav, footer, .cancel-link, #btn-print, .badge { display: none !important; }
+    .grid { grid-template-columns: 1fr !important; gap: 0; }
+    .panel { border: 1px solid #ccc !important; background: #fff !important; break-inside: avoid; }
+    .panel-head { color: #333 !important; border-color: #ccc !important; }
+    .detail-row { border-color: #ddd !important; }
+    .detail-row .label { color: #666 !important; }
+    .detail-row .value, h1 { color: #000 !important; }
+    .signed-box img { border: 1px solid #ccc !important; }
+    .eyebrow { color: #000 !important; }
+    .eyebrow::before { display: none; }
+  }
 </style>
 @endpush
 
@@ -150,6 +168,7 @@
           <div class="signed-meta">
             <span class="ok">&gt; assinado em {{ $pedido->signed_at->format('d/m/Y \à\s H:i') }}</span>
           </div>
+          <button type="button" class="btn btn-ghost" style="margin-top: 18px;" onclick="window.print()">imprimir</button>
         </div>
       @else
         <div class="panel-head">ÁREA DE ASSINATURA</div>
@@ -237,4 +256,12 @@
   });
 </script>
 @endif
+<script>
+  const btnPrint = document.getElementById('btn-print');
+  if (btnPrint) {
+    btnPrint.addEventListener('click', () => {
+      window.print();
+    });
+  }
+</script>
 @endsection

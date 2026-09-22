@@ -1,126 +1,27 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login — PRODUTOS.SYS</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+@extends('layouts.app')
+
+@section('title', 'Login — PRODUTOS.SYS')
+
+@push('styles')
 <style>
-  :root {
-    --ink: #0a0c0e;
-    --panel: #14171a;
-    --panel-line: rgba(255, 176, 0, 0.14);
-    --amber: #ffb000;
-    --amber-dim: rgba(255, 176, 0, 0.55);
-    --signal: #ff6b35;
-    --paper: #d9d6ce;
-    --paper-dim: #8b8a83;
-    --danger: #ff5c5c;
-  }
-
-  * { box-sizing: border-box; }
-
   body {
-    margin: 0;
-    min-height: 100vh;
-    background: var(--ink);
-    color: var(--paper);
-    font-family: 'IBM Plex Sans', sans-serif;
-    -webkit-font-smoothing: antialiased;
-    background-image:
-      linear-gradient(var(--panel-line) 1px, transparent 1px),
-      linear-gradient(90deg, var(--panel-line) 1px, transparent 1px);
-    background-size: 48px 48px;
-    background-position: center top;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 24px;
   }
 
-  a { color: inherit; }
-
-  :focus-visible {
-    outline: 2px solid var(--amber);
-    outline-offset: 3px;
-  }
-
-  .mono { font-family: 'IBM Plex Mono', monospace; }
-
-  .brand {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-family: 'IBM Plex Mono', monospace;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    font-size: 15px;
-    color: var(--paper);
-    text-decoration: none;
-    justify-content: center;
-    margin-bottom: 36px;
-  }
-
-  .brand-mark {
-    width: 22px;
-    height: 22px;
-    border: 1.5px solid var(--amber);
-    position: relative;
-    flex-shrink: 0;
-  }
-  .brand-mark::before,
-  .brand-mark::after {
-    content: '';
-    position: absolute;
-    background: var(--amber);
-  }
-  .brand-mark::before { top: 50%; left: 3px; right: 3px; height: 1.5px; transform: translateY(-50%); }
-  .brand-mark::after { left: 50%; top: 3px; bottom: 3px; width: 1.5px; transform: translateX(-50%); }
-
   .login-box {
     width: 100%;
     max-width: 400px;
   }
 
-  .terminal {
-    background: var(--panel);
-    border: 1px solid var(--panel-line);
-  }
-
-  .terminal-head {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 16px;
-    border-bottom: 1px solid var(--panel-line);
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    color: var(--paper-dim);
+  .login-box .brand {
+    justify-content: center;
+    margin-bottom: 36px;
   }
 
   .terminal-body { padding: 32px 28px; }
-
-  .eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 12px;
-    letter-spacing: 0.16em;
-    color: var(--amber);
-    margin-bottom: 14px;
-  }
-  .eyebrow::before {
-    content: '';
-    width: 7px;
-    height: 7px;
-    background: var(--amber);
-    box-shadow: 0 0 8px 1px var(--amber);
-    animation: blink 1.6s steps(2, jump-none) infinite;
-  }
-  @keyframes blink { 50% { opacity: 0.25; } }
 
   h1 {
     font-family: 'IBM Plex Mono', monospace;
@@ -178,28 +79,7 @@
     margin-bottom: 20px;
   }
 
-  .btn {
-    width: 100%;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 13px;
-    letter-spacing: 0.06em;
-    text-decoration: none;
-    padding: 14px 22px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    border: 1px solid transparent;
-    cursor: pointer;
-    transition: all 0.15s ease;
-  }
-
-  .btn-primary {
-    background: var(--amber);
-    color: var(--ink);
-    font-weight: 600;
-  }
-  .btn-primary:hover { background: #ffc233; }
+  .btn { width: 100%; justify-content: center; }
 
   .footer-link {
     text-align: center;
@@ -214,53 +94,63 @@
   }
   .footer-link a:hover { text-decoration: underline; }
 </style>
-</head>
-<body>
+@endpush
 
-  <div class="login-box">
-    <a href="/" class="brand">
-      <span class="brand-mark"></span>
-      PRODUTOS.SYS
-    </a>
+@section('content')
+<div class="login-box">
+  <a href="/" class="brand">
+    <span class="brand-mark"></span>
+    PRODUTOS.SYS
+  </a>
 
-    <div class="terminal">
-      <div class="terminal-head">
-        <span>AUTENTICAÇÃO</span>
-        <span>STATUS: AGUARDANDO</span>
-      </div>
-      <div class="terminal-body">
-        <div class="eyebrow">ACESSO RESTRITO</div>
-        <h1>Entrar no sistema</h1>
-        <p class="lede">Informe suas credenciais para acessar o painel de produtos.</p>
-
-        @if ($errors->any())
-          <div class="alert">
-            &gt; {{ $errors->first() }}
-          </div>
-        @endif
-
-        <form method="POST" action="{{ route('login') }}">
-          @csrf
-
-          <div class="field">
-            <label for="email">E-mail</label>
-            <input type="email" id="email" name="email" value="{{ old('email') }}" required autofocus>
-          </div>
-
-          <div class="field">
-            <label for="password">Senha</label>
-            <input type="password" id="password" name="password" required>
-          </div>
-
-          <button type="submit" class="btn btn-primary">Acessar sistema →</button>
-        </form>
-      </div>
+  <div class="terminal">
+    <div class="terminal-head">
+      <span>AUTENTICAÇÃO</span>
+      <span>STATUS: AGUARDANDO</span>
     </div>
+    <div class="terminal-body">
+      <div class="eyebrow">ACESSO RESTRITO</div>
+      <h1>Entrar no sistema</h1>
+      <p class="lede">Informe suas credenciais para acessar o painel de produtos.</p>
 
-    <div class="footer-link">
-      Ainda não tem conta? <a href="{{ route('register') }}">Cadastre-se</a>
+      @if ($errors->any())
+        <div class="alert">
+          &gt; {{ $errors->first() }}
+        </div>
+      @endif
+
+      <form method="POST" action="{{ route('login') }}">
+        @csrf
+
+        <div class="field">
+          <label for="email">E-mail</label>
+          <input type="email" id="email" name="email" value="{{ old('email') }}" required autofocus>
+        </div>
+
+        <div class="field">
+          <label for="password">Senha</label>
+          <input type="password" id="password" name="password" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Acessar sistema →</button>
+      </form>
     </div>
   </div>
 
-</body>
-</html>
+  <div class="footer-link">
+    Ainda não tem conta? <a href="{{ route('register') }}">Cadastre-se</a>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+<script>
+  document.querySelector('form').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const passwordField = document.getElementById('password');
+    passwordField.value = CryptoJS.SHA256(passwordField.value).toString();
+
+    e.target.submit();
+  });
+</script>
+@endsection

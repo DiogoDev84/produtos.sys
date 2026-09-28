@@ -8,7 +8,7 @@ use App\Models\User;
 
 class AuthController extends Controller
 {
-    //Mostra a tela de login 
+    //Mostra a tela de Cadastro 
     public function showRegisterForm()
     {
         return view('auth.register');
@@ -53,13 +53,13 @@ class AuthController extends Controller
 
         // 2. Tenta autenticar (Laravel compara o hash da senha por você)
         if (Auth::attempt($credentials)) {
-            $request->session()->regenerate(); //envita fixação de sessão (segurança)
+            $request->session()->regenerate(); //evita fixação de sessão (segurança)
             return redirect()->intended(route('produtos.index'));
         }
 
         // 3. Se falhar volta com erro 
         return back()->withErrors([
-            'email' => 'Email ou senha inorretos.'
+            'email' => 'Email ou senha incorretos.'
         ])->onlyInput('email');
     }
     //Logout 

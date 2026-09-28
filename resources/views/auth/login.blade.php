@@ -142,15 +142,4 @@
   </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
-<script>
-  document.querySelector('form').addEventListener('submit', function (e) {
-    e.preventDefault();
-
-    const passwordField = document.getElementById('password');
-    passwordField.value = CryptoJS.SHA256(passwordField.value).toString();
-
-    e.target.submit();
-  });
-</script>
 @endsection

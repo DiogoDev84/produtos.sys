@@ -40,22 +40,7 @@
 
 @section('content')
 <div class="wrap">
-  <nav>
-    <a href="{{ route('produtos.index') }}" class="brand">
-      <span class="brand-mark"></span>
-      PRODUTOS.SYS
-    </a>
-    <div class="navlinks" style="align-items: center;">
-      <a href="/">Início</a>
-      <a href="{{ route('produtos.index') }}">Produtos</a>
-      <a href="{{ route('clientes.index') }}">Clientes</a>
-      <a href="{{ route('pedidos.index') }}">Pedidos</a>
-      <form method="POST" action="{{ route('logout') }}" style="display:inline; margin: 0;">
-        @csrf
-        <button type="submit" class="btn-logout">Sair →</button>
-      </form>
-    </div>
-  </nav>
+  @include('partials.nav')
 
   <div class="eyebrow">NOVO REGISTRO</div>
   <h1>Cadastrar cliente</h1>
@@ -103,26 +88,5 @@
     <span>LARAVEL + DOCKER</span>
   </footer>
 </div>
-<script>
-  const phoneInput = document.getElementById('phone');
-
-  phoneInput.addEventListener ('input', function(e){
-    let digits = e.target.value.replace(/\D/g, ''); // remove tudo que não é número
-    digits = digits.substring(0, 11);  // limita a 11 dígitos (DDD + 9 dígitos)
-
-    let formatted = '';
-    
-   if (digits.length > 0) {
-      formatted += '(' + digits.substring(0, 2); // abre parêntese + DDD
-    }
-    if (digits.length > 2) {
-      formatted += ') ' + digits.substring(2, 7); // fecha parêntese + espaço + primeiros dígitos
-    }
-    if (digits.length > 7) {
-      formatted += '-' + digits.substring(7, 11); // traço + últimos dígitos
-    }
-    e.target.value = formatted;
-  });
-
-</script>
+@include('partials.phone-mask')
 @endsection

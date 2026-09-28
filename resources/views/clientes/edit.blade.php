@@ -40,22 +40,7 @@
 
 @section('content')
 <div class="wrap">
-  <nav>
-    <a href="{{ route('produtos.index') }}" class="brand">
-      <span class="brand-mark"></span>
-      PRODUTOS.SYS
-    </a>
-    <div class="navlinks" style="align-items: center;">
-      <a href="/">Início</a>
-      <a href="{{ route('produtos.index') }}">Produtos</a>
-      <a href="{{ route('clientes.index') }}">Clientes</a>
-      <a href="{{ route('pedidos.index') }}">Pedidos</a>
-      <form method="POST" action="{{ route('logout') }}" style="display:inline; margin: 0;">
-        @csrf
-        <button type="submit" class="btn-logout">Sair →</button>
-      </form>
-    </div>
-  </nav>
+  @include('partials.nav')
 
   <div class="eyebrow">REGISTRO #{{ str_pad($cliente->id, 3, '0', STR_PAD_LEFT) }}</div>
   <h1>Editar cliente</h1>
@@ -81,7 +66,7 @@
 
         <div class="field">
           <label for="phone">telefone</label>
-          <input type="text" name="phone" id="phone" value="{{ old('phone', $cliente->phone) }}" placeholder="ex: (11) 99999-9999">
+          <input type="text" name="phone" id="phone" value="{{ old('phone', $cliente->phone) }}" placeholder="ex: (11) 99999-9999" maxlength="15">
           @error('phone') <div class="error">{{ $message }}</div> @enderror
         </div>
 
@@ -104,4 +89,5 @@
     <span>LARAVEL + DOCKER</span>
   </footer>
 </div>
+@include('partials.phone-mask')
 @endsection

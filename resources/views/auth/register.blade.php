@@ -74,19 +74,5 @@
     </div>
   </div>
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
-<script>
-  document.querySelector('form').addEventListener('submit', function (e) {
-    e.preventDefault(); // pausa o envio do formulário
 
-    const passwordField = document.getElementById('password');
-    const confirmField = document.getElementById('password_confirmation');
-
-    // Transforma a senha em hash SHA-256 antes de enviar
-    passwordField.value = CryptoJS.SHA256(passwordField.value).toString();
-    confirmField.value = CryptoJS.SHA256(confirmField.value).toString();
-
-    e.target.submit(); // agora sim, envia o formulário já com os hashes
-  });
-</script>
 @endsection

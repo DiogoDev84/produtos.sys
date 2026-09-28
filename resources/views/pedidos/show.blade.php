@@ -73,14 +73,10 @@
     .grid { grid-template-columns: 1fr; }
     .navlinks { display: none; }
   }
-    @media (max-width: 860px) {
-    .grid { grid-template-columns: 1fr; }
-    .navlinks { display: none; }
-  }
-
+ 
   @media print {
     body { background: #fff !important; color: #000 !important; }
-    nav, footer, .cancel-link, #btn-print, .badge { display: none !important; }
+    nav, footer, .cancel-link, #btn-print, .badge, .alert { display: none !important; }
     .grid { grid-template-columns: 1fr !important; gap: 0; }
     .panel { border: 1px solid #ccc !important; background: #fff !important; break-inside: avoid; }
     .panel-head { color: #333 !important; border-color: #ccc !important; }
@@ -96,22 +92,7 @@
 
 @section('content')
 <div class="wrap">
-  <nav>
-    <a href="{{ route('produtos.index') }}" class="brand">
-      <span class="brand-mark"></span>
-      PRODUTOS.SYS
-    </a>
-    <div class="navlinks" style="align-items: center;">
-      <a href="/">Início</a>
-      <a href="{{ route('produtos.index') }}">Produtos</a>
-      <a href="{{ route('clientes.index') }}">Clientes</a>
-      <a href="{{ route('pedidos.index') }}">Pedidos</a>
-      <form method="POST" action="{{ route('logout') }}" style="display:inline; margin: 0;">
-        @csrf
-        <button type="submit" class="btn-logout">Sair →</button>
-      </form>
-    </div>
-  </nav>
+  @include('partials.nav')
 
   <div class="eyebrow">
     PEDIDO #{{ str_pad($pedido->id, 3, '0', STR_PAD_LEFT) }}
@@ -124,10 +105,22 @@
   <h1>Detalhes do pedido</h1>
 
   @if (session('success'))
-    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; border: 1px solid var(--amber-dim); color: var(--amber); padding: 12px 16px; margin-bottom: 24px;">
+    <div class="alert" style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; border: 1px solid var(--amber-dim); color: var(--amber); padding: 12px 16px; margin-bottom: 24px;">
       &gt; {{ session('success') }}
-    </div>
+    </div>   
   @endif
+
+ @if (session('error'))
+  <div class="alert" style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; border: 1px solid #b33; color: #e55; padding: 12px 16px; margin-bottom: 24px;">
+    &gt; {{ session('error') }}
+  </div>
+@endif
+
+@error('assinatura')
+  <div class= "alert" style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; border: 1px solid #b33; color: #e55; padding: 12px 16px; margin-bottom: 24px;">
+    &gt; {{ $message }}
+  </div>
+@enderror
 
   <div class="grid">
     <div class="panel">
@@ -167,8 +160,8 @@
           <img src="{{ Storage::url($pedido->assinatura) }}" alt="Assinatura do cliente">
           <div class="signed-meta">
             <span class="ok">&gt; assinado em {{ $pedido->signed_at->format('d/m/Y \à\s H:i') }}</span>
-          </div>
-          <button type="button" class="btn btn-ghost" style="margin-top: 18px;" onclick="window.print()">imprimir</button>
+          </div><button type="button" id="btn-print" class="btn btn-ghost" style="margin-top: 18px;" onclick="window.print()">imprimir</button>
+
         </div>
       @else
         <div class="panel-head">ÁREA DE ASSINATURA</div>
@@ -179,6 +172,10 @@
           <div class="sig-actions">
             <button type="button" id="btn-clear" class="btn btn-ghost">limpar</button>
             <button type="button" id="btn-save" class="btn btn-primary" disabled>confirmar assinatura</button>
+              <form id="form-assinatura" method="POST" action="{{ route('pedidos.assinar', $pedido) }}" style="display:none;">
+              @csrf
+              <input type="hidden" name="assinatura" id="input-assinatura">
+              </form>
           </div>
         </div>
       @endif
@@ -213,7 +210,7 @@
     penColor: 'rgb(10, 12, 14)'
   });
 
-  const btnClear = document.getElementById('btn-clear');
+    const btnClear = document.getElementById('btn-clear');
   const btnSave = document.getElementById('btn-save');
 
   btnClear.addEventListener('click', () => {
@@ -225,43 +222,16 @@
     btnSave.disabled = signaturePad.isEmpty();
   });
 
-  btnSave.addEventListener('click', async () => {
+  btnSave.addEventListener('click', () => {
     if (signaturePad.isEmpty()) return;
 
     btnSave.disabled = true;
     btnSave.textContent = 'salvando...';
 
-    const dataUrl = signaturePad.toDataURL('image/png');
-
-    try {
-      const response = await fetch("{{ route('pedidos.assinar', $pedido) }}", {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-TOKEN': '{{ csrf_token() }}',
-        },
-        body: JSON.stringify({ assinatura: dataUrl }),
-      });
-
-      if (response.redirected) {
-        window.location.href = response.url;
-      } else {
-        window.location.reload();
-      }
-    } catch (err) {
-      alert('Erro ao salvar assinatura. Tente novamente.');
-      btnSave.disabled = false;
-      btnSave.textContent = 'confirmar assinatura';
-    }
+    // Coloca a imagem (em texto base64) dentro do campo escondido e envia o formulário
+    document.getElementById('input-assinatura').value = signaturePad.toDataURL('image/png');
+    document.getElementById('form-assinatura').submit();
   });
 </script>
 @endif
-<script>
-  const btnPrint = document.getElementById('btn-print');
-  if (btnPrint) {
-    btnPrint.addEventListener('click', () => {
-      window.print();
-    });
-  }
-</script>
 @endsection

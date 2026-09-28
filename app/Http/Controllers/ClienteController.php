@@ -65,14 +65,14 @@ class ClienteController extends Controller
     {
         $validated = $request->validate([
         'name'=>['required', 'string', 'max:255'],
-        'email'=>['required', 'string', 'unique:clientes,email,' . $cliente->id],
-        'phone' =>['required', 'string', 'max:20'],
+        'email'=>['required', 'email', 'unique:clientes,email,' . $cliente->id],
+        'phone' =>['nullable', 'string', 'max:20'],
         'address' =>['nullable','string', 'max:255'],
         ]);
 
         $cliente->update($validated);
 
-        return redirect()->route('clientes.index')->with('success', 'Cliente auaqlizado com sucesso!');
+        return redirect()->route('clientes.index')->with('success', 'Cliente atualizado com sucesso!');
     }
 
     /**

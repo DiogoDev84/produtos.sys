@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('pedidos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('cliente_id')->constraint('clientes')->onDelete('cascade');
-            $table->foreignId('produto_id')->constraint('porducts')->onDelete('cascade');
+            $table->foreignId('cliente_id')->constrained('clientes')->onDelete('cascade');
+            $table->foreignId('produto_id')->constrained('products')->onDelete('cascade');
             $table->integer('quantidade')->default(1);
             $table->decimal('valor_total' , 10 , 2);
             $table->string('assinatura')->nullable();
